@@ -49,7 +49,7 @@ namespace CombatSim2._0
         //method for enemy attack
         public override int Attack(Actor actor)
         {
-            attack = rng.Next(15, 26);
+            attack = rng.Next(15, 31);
             chance = rng.Next(1, 11);
             if (chance > 8)
             {
@@ -92,7 +92,7 @@ namespace CombatSim2._0
                         Console.WriteLine("{0} has hit {1} for {2} HP!", this.Name, actor.Name, attack);
                         return attack;   
                     }
-                Console.WriteLine("You dodge {0}'s attack",this.Name);
+                Console.WriteLine("You miss your attack",this.Name);
                 return 0;
                 case AttackType.Magic:
                     attack = rng.Next(10, 16);
@@ -149,18 +149,48 @@ namespace CombatSim2._0
     {
         public Player Player { get; set; }
         public Enemy Enemy { get; set; }
+        //make string variables to hold name
+        public string playerName = string.Empty;
+        public string enemyName = string.Empty;
+        public void StartDisplay()
+        {
+            Console.WriteLine(@"
+___________.__       .__     __                         
+\_   _____/|__| ____ |  |___/  |_                       
+ |    __)  |  |/ ___\|  |  \   __\                      
+ |     \   |  / /_/  >   Y  \  |                        
+ \___  /   |__\___  /|___|  /__|                        
+     \/      /_____/      \/                            
+   _____                  __  .__    .__                
+  /  _  \   ____ ___.__._/  |_|  |__ |__| ____    ____  
+ /  /_\  \ /    <   |  |\   __\  |  \|  |/    \  / ___\ 
+/    |    \   |  \___  | |  | |   Y  \  |   |  \/ /_/  >
+\____|__  /___|  / ____| |__| |___|  /__|___|  /\___  / 
+        \/     \/\/                \/        \//_____/  
+");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine("Who are you?");
+            playerName = Console.ReadLine();
+            Console.WriteLine("Who are you fighting?");
+            enemyName = Console.ReadLine();
+            Player.Name = playerName;
+            Enemy.Name = enemyName;
+        }
         public void DisplayCombatInfo()
         {
             Console.Clear();
             Console.WriteLine("Use 1 to attack with a sword for 25-35 damage with a 70% chance to hit");
             Console.WriteLine("Use 2 to throw some magic it always hits 10-15");
             Console.WriteLine("Use 3 to heal 5-10 because you arn't doing very well...");
-            Console.WriteLine("{0} Health remaining: {1}",Player.Name,Player.HP);
-            Console.WriteLine("{0} Health remaining: {1}", Enemy.Name, Enemy.HP);
+            Console.WriteLine("{0} Health remaining: {1}",playerName,Player.HP);
+            Console.WriteLine("{0} Health remaining: {1}", enemyName, Enemy.HP);
 
         }
         public void PlayGame() 
         {
+            StartDisplay();
             while (this.Player.IsAlive && this.Enemy.IsAlive)
             {
                 DisplayCombatInfo();
@@ -170,19 +200,20 @@ namespace CombatSim2._0
             if (this.Player.IsAlive)
             {
                 Console.Clear();
-                Console.WriteLine("You Win! {0} beat {1} press any key to continue being awesome at life...",this.Player,this.Enemy);
+                Console.WriteLine("You Win! {0} beat {1} press any key to continue being awesome at life...",Player.Name,Enemy.Name);
+                Console.ReadKey();
             }
             else
             {
                 Console.Clear();
-                Console.WriteLine("You Suck! {0} beat {1} and you should feel bad press any key to end...", this.Enemy,this.Player);
+                Console.WriteLine("You Suck! {0} beat {1} and you should feel bad press any key to end...", Enemy.Name,Player.Name);
                 Console.ReadKey();
             }
         }
         public Game()
         {
-            this.Player = new Player("Colton",100);
-            this.Enemy = new Enemy("Enemy", 200);
+            this.Player = new Player(playerName,100);
+            this.Enemy = new Enemy(enemyName, 200);
         }
     }
 }
