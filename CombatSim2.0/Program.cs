@@ -69,7 +69,8 @@ namespace CombatSim2._0
         {
             Sword = 1,
             Magic,
-            Heal
+            Heal,
+            fail
         }
         public override int Attack(Actor actor)
         {
@@ -98,19 +99,56 @@ namespace CombatSim2._0
                     this.HP += attack;
                     Console.WriteLine("{0} has healed for {1} HP");
                     return attack;
+                case AttackType.fail:
+                    attack = rng.Next(5, 11);
+                    this.HP -= attack;
+                    Console.WriteLine("{0} tripped over a rock and took {1} damage...Nice Job!");
+                    return attack;
+
+                    
                     
             }
-
+            return 0;
         }
         private AttackType ChooseAttack()
         {
-            Console.WriteLine("Select an attack");
-            Console.WriteLine("1 is a sword which hit from 25 to 35 HP but only has a 70% chance to hit");
-
+            //make isNumber for consolereadline and input
+            int isNumber = 0;
+            Console.Write("Select your weapon");
+            string userInput = Console.ReadLine();
+            if (int.TryParse(userInput,out isNumber))
+            {
+                switch (isNumber)
+                {
+                    case 1:
+                       return AttackType.Sword;
+                    case 2:
+                       return AttackType.Magic;
+                    case 3:
+                       return AttackType.Heal;
+                }
+            }
+                Console.WriteLine("Invalid Input Jerk");
+                return AttackType.fail;
         }
         public Player(string player, int hp) : base(player, hp)
         {
 
+        }
+    }
+    public class Game
+    {
+        public Player Player { get; set; }
+        public Enemy Enemy { get; set; }
+        public void DisplayCombatInfo
+        {
+            Console.WriteLine("{0} Health remaining: {1}",, );
+        }
+        
+        public Game()
+        {
+            this.Player = new Player("Colton",100);
+            this.Enemy = new Enemy("Enemy", 200);
         }
     }
 }
